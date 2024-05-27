@@ -1,16 +1,16 @@
-// VimeoScreen.js
+// YoutubeScreen.js e VimeoScreen.js
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { buscarVideosVimeo } from './vimeo';
+import { buscarVideos } from './youtube'; // ou buscarVideosVimeo para Vimeo
 
-export default function VimeoScreen() {
+export default function VideoScreen() {
   const [pesquisa, setPesquisa] = useState('');
   const [videos, setVideos] = useState([]);
 
   const pesquisar = async () => {
     try {
-      const resultados = await buscarVideosVimeo(pesquisa);
+      const resultados = await buscarVideos(pesquisa);
       setVideos(resultados);
     } catch (erro) {
       console.error('Erro ao pesquisar vídeos:', erro);
@@ -18,27 +18,27 @@ export default function VimeoScreen() {
   };
 
   return (
-    <View style={estilos.container}>
-      <View style={estilos.containerPesquisa}>
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
         <TextInput
-          style={estilos.entrada}
+          style={styles.input}
           placeholder="Digite sua pesquisa"
           value={pesquisa}
           onChangeText={setPesquisa}
         />
-        <TouchableOpacity style={estilos.botao} onPress={pesquisar}>
-          <Text style={estilos.textoBotao}>Pesquisar</Text>
+        <TouchableOpacity style={styles.button} onPress={pesquisar}>
+          <Text style={styles.buttonText}>Pesquisar</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView style={estilos.scrollView}>
+      <ScrollView style={styles.scrollView}>
         {videos.map(video => (
-          <View key={video.uri} style={estilos.containerVideo}>
-            <Text style={estilos.tituloVideo}>{video.name}</Text>
+          <View key={video.id.videoId} style={styles.videoContainer}>
+            <Text style={styles.videoTitle}>{video.snippet.title}</Text>
             <WebView
-              style={estilos.webview}
+              style={styles.webview}
               javaScriptEnabled={true}
               domStorageEnabled={true}
-              source={{ html: `<iframe width="100%" height="315" src="https://player.vimeo.com/video/${video.uri.split('/').pop()}" frameborder="0" allowfullscreen></iframe>` }}
+              source={{ html: `<iframe width="100%" height="215" src="https://www.youtube.com/embed/${video.id.videoId}" frameborder="0" allowfullscreen></iframe>` }}
             />
           </View>
         ))}
@@ -47,47 +47,45 @@ export default function VimeoScreen() {
   );
 }
 
-const estilos = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-    paddingTop: 50,
+    backgroundColor: '#f0f0f0',
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
-  containerPesquisa: {
+  searchContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
-    backgroundColor: '#6200ee',
-    borderRadius: 8,
-    margin: 20,
+    marginBottom: 20,
   },
-  entrada: {
-    height: 40,
+  input: {
     flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 4,
-    paddingHorizontal: 10,
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 20,
+    paddingHorizontal: 15,
     marginRight: 10,
   },
-  botao: {
-    backgroundColor: '#03dac5',
+  button: {
+    backgroundColor: '#c4302b',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 4,
+    borderRadius: 20,
   },
-  textoBotao: {
+  buttonText: {
     color: '#fff',
+    fontSize: 16,
     fontWeight: 'bold',
   },
   scrollView: {
     flex: 1,
-    paddingHorizontal: 20,
   },
-  containerVideo: {
+  videoContainer: {
     marginBottom: 20,
     backgroundColor: '#fff',
-    borderRadius: 8,
+    borderRadius: 10,
     padding: 15,
     shadowColor: '#000',
     shadowOffset: {
@@ -98,7 +96,7 @@ const estilos = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  tituloVideo: {
+  videoTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
@@ -106,5 +104,6 @@ const estilos = StyleSheet.create({
   webview: {
     width: '100%',
     aspectRatio: 16 / 9,
+    borderRadius: 10,
   },
 });
