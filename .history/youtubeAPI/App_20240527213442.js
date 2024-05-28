@@ -18,9 +18,9 @@ function HomeTabs() {
         tabBarIcon: ({ color, size }) => {
           let iconName;
           if (route.name === 'YouTube') {
-            iconName = require('./assets/youtube.png');
+            iconName = require('./assets/youtube_icon.png');
           } else if (route.name === 'Vimeo') {
-            iconName = require('./assets/vimeo.png');
+            iconName = require('./assets/vimeo_icon.png');
           }
           return <Image source={iconName} style={{ width: size, height: size, tintColor: color }} />;
         },
@@ -40,8 +40,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Welcome">
-        <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Home" component={HomeTabs} options={{ headerShown: false }}/>
+        <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="Home" component={HomeTabs} />
       </Stack.Navigator>
     </NavigationContainer>
   );

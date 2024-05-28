@@ -18,7 +18,7 @@ function HomeTabs() {
         tabBarIcon: ({ color, size }) => {
           let iconName;
           if (route.name === 'YouTube') {
-            iconName = require('./assets/youtube.png');
+            iconName = require('./assets/youtube_icon.png');
           } else if (route.name === 'Vimeo') {
             iconName = require('./assets/vimeo.png');
           }

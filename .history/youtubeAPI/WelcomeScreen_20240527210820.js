@@ -14,7 +14,7 @@ export default function WelcomeScreen({ navigation }) {
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      <ImageBackground source={require('./assets/back5.gif')} style={styles.backgroundImage}>
+      <ImageBackground source={require('./assets/back4.gif')} style={styles.backgroundImage}>
         <Text style={styles.title}>Bem-vindo ao Pesquisa de Vídeos</Text>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
           <Text style={styles.buttonText}>Começar</Text>

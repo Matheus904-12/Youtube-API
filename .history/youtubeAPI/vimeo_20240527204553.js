@@ -4,7 +4,7 @@ const API_KEY = '4273ef75cb4b9129a4d47e7cdf0b2ef855ae7710';
 
 export const buscarVideosVimeo = async (query) => {
   try {
-    const pesquisa = await axios.get('https://api.vimeo.com/videos', {
+    const pesquisa = await axios.get('https://vimeo.com/watch', {
       params: {
         query: query,
         per_page: 10,

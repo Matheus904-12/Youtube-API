@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Animated } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { buscarVideos } from './youtube'; // Certifique-se de que o caminho está correto
+import { buscarVideos } from './vimeo'; // ou buscarVideosVimeo para Vimeo
 
-export default function YoutubeScreen() {
+export default function VideoScreen() {
   const [pesquisa, setPesquisa] = useState('');
   const [videos, setVideos] = useState([]);
-  const fadeAnim = useState(new Animated.Value(0))[0];
+  const [fadeAnim] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
 
   const pesquisar = async () => {
     try {
       const resultados = await buscarVideos(pesquisa);
       setVideos(resultados);
-      fadeAnim.setValue(0);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start();
     } catch (erro) {
       console.error('Erro ao pesquisar vídeos:', erro);
     }
@@ -31,14 +33,13 @@ export default function YoutubeScreen() {
           placeholder="Digite sua pesquisa"
           value={pesquisa}
           onChangeText={setPesquisa}
-          onSubmitEditing={pesquisar} // Adicionado para pesquisar ao pressionar "Enter"
         />
         <TouchableOpacity style={styles.button} onPress={pesquisar}>
           <Text style={styles.buttonText}>Pesquisar</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.scrollView}>
-        {videos.map((video) => (
+        {videos.map((video, index) => (
           <Animated.View key={video.id.videoId} style={[styles.videoContainer, { opacity: fadeAnim }]}>
             <Text style={styles.videoTitle}>{video.snippet.title}</Text>
             <WebView

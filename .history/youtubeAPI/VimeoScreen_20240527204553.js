@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Animated } from 'react-native';
+// YoutubeScreen.js e VimeoScreen.js
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { buscarVideos } from './youtube'; // Certifique-se de que o caminho está correto
+import { buscarVideos } from './youtube'; // ou buscarVideosVimeo para Vimeo
 
-export default function YoutubeScreen() {
+export default function VideoScreen() {
   const [pesquisa, setPesquisa] = useState('');
   const [videos, setVideos] = useState([]);
-  const fadeAnim = useState(new Animated.Value(0))[0];
 
   const pesquisar = async () => {
     try {
       const resultados = await buscarVideos(pesquisa);
       setVideos(resultados);
-      fadeAnim.setValue(0);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start();
     } catch (erro) {
       console.error('Erro ao pesquisar vídeos:', erro);
     }
@@ -31,15 +25,14 @@ export default function YoutubeScreen() {
           placeholder="Digite sua pesquisa"
           value={pesquisa}
           onChangeText={setPesquisa}
-          onSubmitEditing={pesquisar} // Adicionado para pesquisar ao pressionar "Enter"
         />
         <TouchableOpacity style={styles.button} onPress={pesquisar}>
           <Text style={styles.buttonText}>Pesquisar</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.scrollView}>
-        {videos.map((video) => (
-          <Animated.View key={video.id.videoId} style={[styles.videoContainer, { opacity: fadeAnim }]}>
+        {videos.map(video => (
+          <View key={video.id.videoId} style={styles.videoContainer}>
             <Text style={styles.videoTitle}>{video.snippet.title}</Text>
             <WebView
               style={styles.webview}
@@ -47,7 +40,7 @@ export default function YoutubeScreen() {
               domStorageEnabled={true}
               source={{ html: `<iframe width="100%" height="215" src="https://www.youtube.com/embed/${video.id.videoId}" frameborder="0" allowfullscreen></iframe>` }}
             />
-          </Animated.View>
+          </View>
         ))}
       </ScrollView>
     </View>

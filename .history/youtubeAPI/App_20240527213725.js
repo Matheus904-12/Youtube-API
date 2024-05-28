@@ -18,11 +18,11 @@ function HomeTabs() {
         tabBarIcon: ({ color, size }) => {
           let iconName;
           if (route.name === 'YouTube') {
-            iconName = require('./assets/youtube.png');
+            iconName = 'https://upload.wikimedia.org/wikipedia/commons/7/75/YouTube_social_white_circle_%282017%29.svg';
           } else if (route.name === 'Vimeo') {
-            iconName = require('./assets/vimeo.png');
+            iconName = 'https://upload.wikimedia.org/wikipedia/commons/1/18/Vimeo_Icon_White_on_Blue.svg';
           }
-          return <Image source={iconName} style={{ width: size, height: size, tintColor: color }} />;
+          return <Image source={{ uri: iconName }} style={{ width: size, height: size, tintColor: color }} />;
         },
       })}
       tabBarOptions={{

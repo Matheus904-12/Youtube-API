@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Animated } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { buscarVideos } from './youtube'; // Certifique-se de que o caminho está correto
+import { buscarVideosVimeo } from './youtube'; // Certifique-se de que o caminho está correto
 
-export default function YoutubeScreen() {
+export default function VimeoScreen() {
   const [pesquisa, setPesquisa] = useState('');
   const [videos, setVideos] = useState([]);
   const fadeAnim = useState(new Animated.Value(0))[0];
 
   const pesquisar = async () => {
     try {
-      const resultados = await buscarVideos(pesquisa);
+      const resultados = await buscarVideosVimeo(pesquisa);
       setVideos(resultados);
-      fadeAnim.setValue(0);
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 1000,
@@ -31,7 +30,6 @@ export default function YoutubeScreen() {
           placeholder="Digite sua pesquisa"
           value={pesquisa}
           onChangeText={setPesquisa}
-          onSubmitEditing={pesquisar} // Adicionado para pesquisar ao pressionar "Enter"
         />
         <TouchableOpacity style={styles.button} onPress={pesquisar}>
           <Text style={styles.buttonText}>Pesquisar</Text>
@@ -39,13 +37,13 @@ export default function YoutubeScreen() {
       </View>
       <ScrollView style={styles.scrollView}>
         {videos.map((video) => (
-          <Animated.View key={video.id.videoId} style={[styles.videoContainer, { opacity: fadeAnim }]}>
-            <Text style={styles.videoTitle}>{video.snippet.title}</Text>
+          <Animated.View key={video.uri} style={[styles.videoContainer, { opacity: fadeAnim }]}>
+            <Text style={styles.videoTitle}>{video.name}</Text>
             <WebView
               style={styles.webview}
               javaScriptEnabled={true}
               domStorageEnabled={true}
-              source={{ html: `<iframe width="100%" height="215" src="https://www.youtube.com/embed/${video.id.videoId}" frameborder="0" allowfullscreen></iframe>` }}
+              source={{ html: `<iframe width="100%" height="215" src="https://player.vimeo.com/video/${video.uri.split('/').pop()}" frameborder="0" allowfullscreen></iframe>` }}
             />
           </Animated.View>
         ))}
