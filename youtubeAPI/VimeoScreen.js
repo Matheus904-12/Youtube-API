@@ -43,7 +43,7 @@ export default function VimeoScreen() {
               style={styles.webview}
               javaScriptEnabled={true}
               domStorageEnabled={true}
-              source={{ html: `<iframe width="100%" height="215" src="https://player.vimeo.com/video/${video.uri.split('/').pop()}" frameborder="0" allowfullscreen></iframe>` }}
+              source={{ html: `<iframe width="100%" height="100%" src="https://player.vimeo.com/video/${video.uri.split('/').pop()}" frameborder="0" allowfullscreen></iframe>` }}
             />
           </Animated.View>
         ))}
